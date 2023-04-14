@@ -19,4 +19,16 @@ class User < ApplicationRecord
     "O+": 6,
     "O-": 7
   }
+
+  def is_super_admin?
+    Role.find(self.role_id).name.eql?(Role::ROLE[:super_admin])
+  end
+
+  def is_admin?
+    Role.find(self.role_id).name.eql?(Role::ROLE[:admin])
+  end
+
+  def is_user?
+    Role.find(self.role_id).name.eql?(Role::ROLE[:user])
+  end
 end
