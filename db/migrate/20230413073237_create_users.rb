@@ -4,6 +4,8 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :email
       t.integer :phone
+      t.integer :age
+      t.string :sex
       t.integer :blood_type
       t.text :medical_history
       t.integer :role_id, foreign_key:{to_table: :roles}
