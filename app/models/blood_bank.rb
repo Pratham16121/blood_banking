@@ -5,7 +5,7 @@ class BloodBank < ApplicationRecord
   validates :city, presence: true
   validates :state, presence: true
   validates :country, presence: true
-  validates :location, presence: true, uniquness: true
+  validates :location, presence: true, uniqueness: true
   validates :phone, presence: true
   validates :email, presence: true, uniqueness: true
   validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: "Invalid email format"
