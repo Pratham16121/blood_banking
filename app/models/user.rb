@@ -5,8 +5,8 @@ class User < ApplicationRecord
   validates :phone, presence: true, uniqueness: true
   validates :blood_type, presence: true
   validates :name, presence: true
-  validates :sex, format: { with: /\A(male|female|others)\z/,
-    message: "only allows 'male', 'female' and 'others" }
+  validates :sex, format: { with: /\A(Male|Female|Other)\z/,
+    message: "only allows 'Male', 'Female' and 'Other" }
   validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, message: "Invalid email format"
 
   enum blood_type: {

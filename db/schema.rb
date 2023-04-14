@@ -10,9 +10,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_13_073237) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_14_183122) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "blood_banks", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.string "location"
+    t.string "phone"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "blood_requests", force: :cascade do |t|
+    t.integer "recipent_id"
+    t.integer "blood_type"
+    t.boolean "is_completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "donations", force: :cascade do |t|
+    t.integer "donar_id"
+    t.integer "blood_type"
+    t.integer "blood_unit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "inventories", force: :cascade do |t|
+    t.integer "blood_type"
+    t.integer "quantity"
+    t.integer "updated_by"
+    t.integer "blood_bank_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "roles", force: :cascade do |t|
     t.string "name", null: false
@@ -24,6 +62,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_073237) do
     t.string "name"
     t.string "email"
     t.integer "phone"
+    t.integer "age"
+    t.string "sex"
     t.integer "blood_type"
     t.text "medical_history"
     t.integer "role_id"
