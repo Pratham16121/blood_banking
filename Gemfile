@@ -9,6 +9,9 @@ gem "rails", "~> 7.0.4", ">= 7.0.4.3"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
+# Use Active Model has_secure_password
+gem 'bcrypt', '~> 3.1.7'
+
 # Use of JWT for encryption of tokens
 gem 'jwt'
 
