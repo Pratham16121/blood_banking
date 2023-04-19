@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find_by_id(decode_token(request.headers['Authorization']).first['user_id'])
+    @current_user ||= User.find_by_id(decode_token[0]['user_id'])
   end
   
   def encode_token(token)
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     )
   end
 
-  def decode_token    
+  def decode_token
     auth_header = request.headers['Authorization']
     token = auth_header.split(' ')[1] if auth_header
     JWT.decode token, Rails.application.secrets.secret_key_base, 'HS256'

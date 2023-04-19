@@ -1,16 +1,18 @@
 module Users::V1
-  class Login
-    def initialize
-      @email = email
+  class Login < ApplicationController
+    def initialize(params)    
+      @email = params[:email]
+      @password = params[:password]
     end
 
     def call
       user = User.find_by_email(@email)
 
-      if user && user.authenticate(user_params[:password])
-        render json: { token: encode_token({ user_id: user.id }), message: 'Login successful', status: 200 }
+      if user && user.authenticate(@password)
+        { token: encode_token({ user_id: user.id, time: Time.now }),
+          message: 'Login successful', status: 200 }.as_json
       else
-        render json: { message: 'Invalid email or password', status: 401 }
+        { message: 'Invalid email or password', status: 401 }.as_json
       end
     end
   end

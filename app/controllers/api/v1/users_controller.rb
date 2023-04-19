@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
   before_action :authorize, only: [:index]
 
   def index
-    result = Users::V1::Index.new(@user).call if @user
+    result = Users::V1::Index.new(current_user).call if current_user
     if result[:status] == 200
       render json: result
     else
@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
   def create
-    result = Users::V1::Create.new(user_params).call
+    result = Users::V1::Create.new(user_params = user_params, admin_user = current_user).call
     if result[:status] == 200
       render json: result
     else
@@ -20,8 +20,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def login
-    result = Users::V1::Index.new(email = user_params[:email]).call
-    if result[:status] == 200
+    result = Users::V1::Login.new(user_params).call
+    if result['status'] == 200
       render json: result
     else
       render json: result
@@ -31,6 +31,9 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :age, :sex, :phone, :blood_type,
+                                 :password,
+                                 :password_confirmation,
+                                 :role_id)
   end
 end
