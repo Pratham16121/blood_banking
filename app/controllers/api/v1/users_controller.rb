@@ -1,9 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authorize, only: [:index, :create]
-
-  def login_page
-    # render html: "loginpage"
-  end
+  
   def index
     if current_user
       render json: { user_data: current_user }, status: 200
@@ -14,7 +11,6 @@ class Api::V1::UsersController < ApplicationController
   def create
     user = User.new(user_params)
     user.blood_bank_id = current_user.blood_bank_id
-    byebug
     if user.save
       render json: { success_message: 'User created successfully' }, status: 200
     else
