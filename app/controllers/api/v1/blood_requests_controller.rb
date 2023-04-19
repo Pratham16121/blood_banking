@@ -1,7 +1,11 @@
 class Api::V1::BloodRequestsController < ApplicationController
   before_action :authorize
   def index
-    blood_requests = BloodRequest.where(blood_bank_id: current_user.id).group(:is_completed)
+    blood_requests = BloodRequest.where(blood_bank_id: current_user.blood_bank_id)
+                             .group_by(&:is_completed?)
+    blood_requests = { pending: blood_requests[false] || [],
+                      completed: blood_requests[true] || [] }
+
     if blood_requests
       render json: { blood_request_data: blood_requests }, status: 200
     else
@@ -10,7 +14,8 @@ class Api::V1::BloodRequestsController < ApplicationController
   end
 
   def create
-    blood_request = BloodRequests.new(blood_request_params)
+    blood_request = BloodRequest.new(blood_request_params)
+    blood_request.blood_bank_id = current_user.blood_bank_id
     if blood_request.save
       render json: { success_message: "Blood Request Saved" }, status: 200
     else
@@ -19,7 +24,7 @@ class Api::V1::BloodRequestsController < ApplicationController
   end
 
   def update
-    blood_request = BloodRequests.find params[:id]
+    blood_request = BloodRequest.find params[:id]
     if blood_request.update!(blood_request_params)
       render json: { success_message: "Blood Request Updated" }, status: 200
     else
@@ -30,6 +35,6 @@ class Api::V1::BloodRequestsController < ApplicationController
   private
 
   def blood_request_params
-    params.require(blood_request_data).permit(:recipent_id, :blood_type, :is_completed)
+    params.require(:blood_request_data).permit(:recipent_id, :blood_type, :is_completed)
   end
 end
