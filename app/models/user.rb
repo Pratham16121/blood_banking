@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   belongs_to :role, :class_name => 'Role', :foreign_key => 'role_id'
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: { scope: :blood_bank_id }
   validates :phone, presence: true, uniqueness: true
   validates :blood_type, presence: true
   validates :name, presence: true
