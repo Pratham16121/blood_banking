@@ -1,30 +1,35 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:login]
-  before_action :authorize, only: [:index]
+  before_action :authorize, only: [:index, :create]
 
+  def login_page
+    # render html: "loginpage"
+  end
   def index
-    result = Users::V1::Index.new(current_user).call if current_user
-    if result[:status] == 200
-      render json: result
+    if current_user
+      render json: { user_data: current_user }, status: 200
     else
-      render json: result
+      render json: { error_message: 'Login First' }, status: 401
     end
   end
   def create
-    result = Users::V1::Create.new(user_params = user_params, admin_user = current_user).call
-    if result[:status] == 200
-      render json: result
+    user = User.new(user_params)
+    user.blood_bank_id = current_user.blood_bank_id
+    byebug
+    if user.save
+      render json: { success_message: 'User created successfully' }, status: 200
     else
-      render json: result
+      render json: { error_message: user.errors.full_messages.join(', ')}, status: 422
     end
   end
 
   def login
-    result = Users::V1::Login.new(user_params).call
-    if result['status'] == 200
-      render json: result
+    user = User.find_by_email(user_params[:email])
+
+    if user && user.authenticate(user_params[:password])
+      render json: { token: encode_token({ user_id: user.id, time: Time.now }),
+        message: 'Login successful', status: 200 }.as_json
     else
-      render json: result
+      render json: { error_message: 'Invalid email or password', status: 401 }.as_json
     end
   end
 

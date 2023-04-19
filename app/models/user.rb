@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
+  before_validation :set_role_id
   belongs_to :role, :class_name => 'Role', :foreign_key => 'role_id'
 
   validates :email, presence: true, uniqueness: { scope: :blood_bank_id }
@@ -31,5 +32,11 @@ class User < ApplicationRecord
 
   def is_user?
     Role.find(self.role_id).name.eql?(Role::ROLE[:user])
+  end
+
+  private
+
+  def set_role_id
+    self.role_id = Role.find_by_name('user').id
   end
 end
