@@ -37,6 +37,6 @@ class User < ApplicationRecord
   private
 
   def set_role_id
-    self.role_id = Role.find_by_name('user').id
+    self.role_id = Role.find_by_name('user').id unless role_id.present?
   end
 end

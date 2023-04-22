@@ -10,5 +10,6 @@ Rails.application.routes.draw do
         end
       end
       resources :blood_requests, only: [ :index, :create, :update ]
+      resources :blood_banks, only: [ :index, :create ]
   end
 end

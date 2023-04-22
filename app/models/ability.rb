@@ -11,9 +11,14 @@ class Ability
   end
 
   def super_admin_abilities
+    can [:create], User
+    can [:index], User
+    can [:create, :index], BloodBank
   end
   
   def admin_abilities
+    can [:create], User 
+    can [:index], User
   end
 
   def user_abilities

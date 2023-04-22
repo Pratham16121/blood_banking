@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
-  include CanCan::ControllerAdditions
+  load_and_authorize_resource
+
   rescue_from CanCan::AccessDenied do |exception|
     render json: { message: exception.message, authorization_failure: true }, status: :unauthorized
   end
