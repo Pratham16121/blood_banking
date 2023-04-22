@@ -32,3 +32,12 @@
 
 # Ignore databse.yml file to ignore sharing of local databse credentials
 /config/database.yml
+
+# Ignore db/schema.rb file
+/db/schema.rb
+
+# Ignore .byebug_history
+/.byebug_history
+
+# Ignore Gemfile.lock
+/Gemfile.lock
