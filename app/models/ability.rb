@@ -17,10 +17,14 @@ class Ability
   end
   
   def admin_abilities
-    can [:create], User 
+    can [:create], User
     can [:index], User
+    can [:update, :create], BloodRequest do |request|
+      request.blood_bank_id = @user.blood_bank_id
+    end
   end
 
   def user_abilities
+    can [:index], User
   end
 end

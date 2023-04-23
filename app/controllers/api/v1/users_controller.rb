@@ -3,11 +3,19 @@ class Api::V1::UsersController < ApplicationController
   skip_load_and_authorize_resource only: [:login]
 
   def index
-    user_data = current_user if current_user.is_user?
-    user_data = User.where(blood_bank_id: current_user.blood_bank_id) if current_user.is_admin?
-    user_data = get_user_data_according_to_blood_banks
+    if current_user.is_super_admin?
+      user_data = get_user_data_according_to_blood_banks
+    elsif current_user.is_admin?
+      user_data = User.select(:name, :email, :blood_type, :age, :sex, :phone)
+                      .where(blood_bank_id: current_user.blood_bank_id, role_id: 3)
+    else
+      user_data = current_user.as_json(only: [:id, :name, :email, :blood_type, :age, :sex, :phone])
+    end
 
     if user_data
+      # UNCOMMENT THE FOLLOWING FOR SEEING THE VIEWS
+      # @users_data = user_data
+      # render 'api/v1/users/index'
       render json: { user_data: user_data }, status: 200
     else
       render json: { error_message: 'You have to login' }, status: 401
