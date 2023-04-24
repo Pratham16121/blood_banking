@@ -1,7 +1,7 @@
 class AddBloodBankIdToRequiredModels < ActiveRecord::Migration[7.0]
   def change
-    add_column :blood_requests, :blood_bank_id, :integer, foreign_key:{to_table: :blood_banks}
-    add_column :donations, :blood_bank_id, :integer, foreign_key:{to_table: :blood_banks}
-    add_column :consumptions, :blood_bank_id, :integer, foreign_key:{to_table: :blood_banks}
+    add_reference :blood_requests, :blood_bank, foreign_key: true
+    add_reference :donations, :blood_bank, foreign_key: true
+    add_reference :consumptions, :blood_bank, foreign_key: true
   end
 end
