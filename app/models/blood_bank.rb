@@ -1,4 +1,10 @@
 class BloodBank < ApplicationRecord
+  has_many :blood_bags
+  has_many :blood_requests
+  has_many :donations
+  has_many :users
+  has_many :donars, through: :donations, source: :donar
+
   validates :name, presence: true
   validates :address, presence: true
   validates :city, presence: true

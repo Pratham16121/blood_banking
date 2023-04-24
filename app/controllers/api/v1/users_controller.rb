@@ -18,13 +18,13 @@ class Api::V1::UsersController < ApplicationController
       # render 'api/v1/users/index'
       render json: { user_data: user_data }, status: 200
     else
-      render json: { error_message: 'You have to login' }, status: 401
+      render json: { error_message: 'You have to login' }, status: 422
     end
   end
 
   def create
     user = User.new(user_params)
-    user.blood_bank_id = current_user.blood_bank_id
+    user.blood_bank_id = current_user.blood_bank_id if !user_params[:blood_bank_id].present?
     if user.save
       render json: { success_message: 'User created successfully' }, status: 200
     else
@@ -37,19 +37,17 @@ class Api::V1::UsersController < ApplicationController
 
     if user && user.authenticate(user_params[:password])
       render json: { token: encode_token({ user_id: user.id, time: Time.now }),
-        message: 'Login successful', status: 200 }.as_json
+                     message: 'Login successful' }, status: 200
     else
-      render json: { error_message: 'Invalid email or password', status: 401 }.as_json
+      render json: { error_message: 'Invalid email or password' }, status: 422
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :age, :sex, :phone, :blood_type,
-                                 :password,
-                                 :password_confirmation,
-                                 :role_id)
+    params.require(:user).permit(:name, :email, :age, :sex, :phone, :blood_type, :blood_bank_id,
+                                 :password, :password_confirmation, :role_id)
   end
 
   def get_user_data_according_to_blood_banks

@@ -1,5 +1,6 @@
 class Api::V1::BloodRequestsController < ApplicationController
   before_action :authorize
+
   def index
     blood_requests = BloodRequest.where(blood_bank_id: current_user.blood_bank_id)
                              .group_by(&:is_completed?)
@@ -35,6 +36,6 @@ class Api::V1::BloodRequestsController < ApplicationController
   private
 
   def blood_request_params
-    params.require(:blood_request_data).permit(:recipent_id, :blood_type, :is_completed)
+    params.require(:blood_request_data).permit(:recipent_id, :blood_type, :is_completed, :blood_unit)
   end
 end

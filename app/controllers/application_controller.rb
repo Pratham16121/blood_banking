@@ -3,7 +3,13 @@ class ApplicationController < ActionController::Base
   load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
-    render json: { message: exception.message, authorization_failure: true }, status: :unauthorized
+    if exception.action == :create && exception.subject.is_a?(BloodRequest)
+      render json: { message: "Recipent must be registerd with blood bank" }, status: :unauthorized
+    elsif exception.action == :create && exception.subject.is_a?(Donation)
+      render json: { message: "Donar must be registerd with blood bank" }, status: :unauthorized
+    else
+      render json: { message: exception.message, authorization_failure: true }, status: :unauthorized
+    end
   end
 
   def current_user

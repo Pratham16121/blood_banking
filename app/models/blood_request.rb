@@ -1,4 +1,7 @@
 class BloodRequest < ApplicationRecord
+  belongs_to :recipent, :class_name => 'User', :foreign_key => 'recipent_id' 
+  belongs_to :blood_bank
+
   validates :recipent_id, presence: true
   validates :blood_type, presence: true
   validates :blood_unit, presence: true
@@ -13,5 +16,5 @@ class BloodRequest < ApplicationRecord
                        blood_unit: blood_unit,
                        blood_bank_id: blood_bank_id)
   end
-  
+
 end

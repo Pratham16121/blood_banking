@@ -14,17 +14,26 @@ class Ability
     can [:create], User
     can [:index], User
     can [:create, :index], BloodBank
+    can [:create], Donation do |donation|
+      User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
+    end
   end
   
   def admin_abilities
     can [:create], User
     can [:index], User
     can [:update, :create], BloodRequest do |request|
-      request.blood_bank_id = @user.blood_bank_id
+      User.find(request[:recipent_id]).blood_bank_id == @user.blood_bank_id
+    end
+    can [:create], Donation do |donation|
+      User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
     end
   end
 
   def user_abilities
     can [:index], User
+    can [:create], Donation do |donation|
+      User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
+    end
   end
 end

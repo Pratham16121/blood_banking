@@ -11,5 +11,6 @@ Rails.application.routes.draw do
       end
       resources :blood_requests, only: [ :index, :create, :update ]
       resources :blood_banks, only: [ :index, :create ]
+      resources :donations, only: [ :create ]
   end
 end

@@ -1,7 +1,10 @@
 class User < ApplicationRecord
   has_secure_password
   before_validation :set_role_id
+
   belongs_to :role, :class_name => 'Role', :foreign_key => 'role_id'
+  has_many :donations, :foreign_key => 'donar_id'
+  has_many :blood_banks, through: :donations
 
   validates :email, presence: true, uniqueness: { scope: :blood_bank_id }
   validates :phone, presence: true, uniqueness: true
