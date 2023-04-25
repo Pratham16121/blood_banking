@@ -1,0 +1,25 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center mb-4">Login Form</h2>
+      <%= form_with url: login_users_path, method: :post do |f| %>
+        <%= f.fields_for :user do |user_form| %>
+          <div class="form-group">
+            <%= user_form.label :email %>
+            <%= user_form.email_field :email, class: "form-control", placeholder: "Enter email" %>
+          </div>
+          <div class="form-group">
+            <%= user_form.label :password %>
+            <%= user_form.password_field :password, class: "form-control", placeholder: "Enter password" %>
+          </div>
+        <% end %>
+        <div class="form-group">
+          <%= f.submit "Login", class: "btn btn-primary btn-block" %>
+        </div>
+      <% end %>
+      <div class="text-center">
+        <%# <%= link_to "Sign Up", new_user_path %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="container">
+  <h1>New Blood Request</h1>
+  <%= form_for @blood_request do |f| %>
+    <div class="form-group">
+      <%= f.label :user_id, "User" %>
+      <%= f.text_field :user_id, class: "form-control", id: "user-search", autocomplete: "off" %>
+      <div id="user-results"></div>
+    </div>
+    <div class="form-group">
+      <%= f.label :blood_type %>
+      <%= f.select :blood_type, options_for_select(BloodRequest::BLOOD_TYPES), {}, { class: "form-control" } %>
+    </div>
+    <div class="form-group">
+      <%= f.label :unit %>
+      <%= f.number_field :unit, class: "form-control" %>
+    </div>
+    <%= f.submit "Create Blood Request", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // Call API to search for users as you type
+    $("#user-search").on("input", function() {
+      var query = $(this).val();
+      if (query.length > 0) {
+        $.ajax({
+          url: "/users/search",
+          type: "GET",
+          data: { query: query },
+          success: function(data) {
+            $("#user-results").html(data);
+          }
+        });
+      } else {
+        $("#user-results").html("");
+      }
+    });
+  });
+</script>

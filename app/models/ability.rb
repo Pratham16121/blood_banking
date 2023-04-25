@@ -22,9 +22,10 @@ class Ability
   def admin_abilities
     can [:create], User
     can [:index], User
-    can [:update, :create], BloodRequest do |request|
+    can [:update, :create, :index], BloodRequest do |request|
       User.find(request[:recipent_id]).blood_bank_id == @user.blood_bank_id
     end
+    can [:new], BloodRequest
     can [:create], Donation do |donation|
       User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
     end
