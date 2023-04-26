@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   end
 
   def index
+    byebug
     if current_user.is_super_admin?
       user_data = get_user_data_according_to_blood_banks
     elsif current_user.is_admin?
@@ -43,7 +44,8 @@ class UsersController < ApplicationController
 
     if user && user.authenticate(user_params[:password])
       token = encode_token({ user_id: user.id, time: Time.now })
-      redirect_to users_path(auth: token), method: :get
+      cookies[:auth_token] = token
+      redirect_to users_path, method: :get
     else
       flash.now.alert = "Invalid email or password"
       render :new
