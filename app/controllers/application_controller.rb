@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
   def decode_token
     auth_header = request.headers['Authorization'] 
-    token = auth_header ? auth_header.split(' ')[1] : params[:auth]
+    token = auth_header ? auth_header.split(' ')[1] : cookies[:auth_token]
     JWT.decode token, Rails.application.secrets.secret_key_base, 'HS256'
   rescue JWT::DecodeError
     nil

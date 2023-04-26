@@ -13,6 +13,7 @@ class Ability
   def super_admin_abilities
     can [:create], User
     can [:index], User
+    can [:logout], User
     can [:create, :index], BloodBank
     can [:create], Donation do |donation|
       User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
@@ -22,6 +23,7 @@ class Ability
   def admin_abilities
     can [:create], User
     can [:index], User
+    can [:logout], User
     can [:update, :create, :index], BloodRequest do |request|
       User.find(request[:recipent_id]).blood_bank_id == @user.blood_bank_id
     end
@@ -33,6 +35,7 @@ class Ability
 
   def user_abilities
     can [:index], User
+    can [:logout], User
     can [:create], Donation do |donation|
       User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
     end
