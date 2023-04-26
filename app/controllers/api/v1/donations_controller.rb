@@ -2,7 +2,6 @@ class Api::V1::DonationsController < ApplicationController
   before_action :authorize
 
   def create
-    byebug
     donation = Donation.new(donation_params)
     donation.blood_bank_id = current_user.blood_bank_id
     donation.donation_date = Time.current

@@ -11,7 +11,6 @@ class Donation < ApplicationRecord
   after_create :add_blood_bags
 
   def add_blood_bags
-    byebug
     BloodBag.create!(blood_type: blood_type, expiry_date: Time.current + 42, 
                      blood_bank_id: blood_bank_id, quantity: blood_unit*2)
   end

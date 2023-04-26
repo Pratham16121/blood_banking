@@ -5,6 +5,10 @@ class UsersController < ApplicationController
   def root
   end
 
+  def search
+    
+  end
+
   def index
     if current_user.is_super_admin?
       user_data = get_user_data_according_to_blood_banks
@@ -17,8 +21,6 @@ class UsersController < ApplicationController
 
     if user_data
       @users_data = user_data
-      render 'users/dashboard'
-      # render json: { user_data: user_data }, status: 200
     else
       render json: { error_message: 'You have to login' }, status: 422
     end
@@ -28,9 +30,11 @@ class UsersController < ApplicationController
     user = User.new(user_params)
     user.blood_bank_id = current_user.blood_bank_id if !user_params[:blood_bank_id].present?
     if user.save
-      render json: { success_message: 'User created successfully' }, status: 200
+      # REDIRECT NAHI HO RAHA H
+      redirect_to users_path(auth: params[:auth]), notice: "User was successfully created."
     else
-      render json: { error_message: user.errors.full_messages.join(', ')}, status: 422
+      flash.now.alert = user.errors.full_messages.join(', ')
+      # render json: { error_message: user.errors.full_messages.join(', ')}, status: 422
     end
   end
 
@@ -39,14 +43,10 @@ class UsersController < ApplicationController
 
     if user && user.authenticate(user_params[:password])
       token = encode_token({ user_id: user.id, time: Time.now })
-      response.headers['Authorization'] = "Bearer #{token}"
-      redirect_to users_path(auth: token)
-      # render json: { token: encode_token({ user_id: user.id, time: Time.now }),
-      #                message: 'Login successful' }, status: 200
+      redirect_to users_path(auth: token), method: :get
     else
       flash.now.alert = "Invalid email or password"
       render :new
-      # render json: { error_message: 'Invalid email or password' }, status: 422
     end
   end
 
