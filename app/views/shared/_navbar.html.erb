@@ -2,10 +2,12 @@
   <div class="alert alert-success" id="flash-message">
     <%= flash[:success] %>
   </div>
+  <% flash.discard(:success) %>
 <% elsif flash[:error] %>
   <div class="alert alert-danger" id="flash-message">
     <%= flash[:error] %>
   </div>
+  <% flash.discard(:error) %>
 <% end %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">

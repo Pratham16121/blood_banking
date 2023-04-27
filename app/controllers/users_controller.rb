@@ -28,7 +28,9 @@ class UsersController < ApplicationController
 
       if user_data
         @users_data = user_data
-        flash[:success] = "Logged In"
+        unless flash[:success]
+          flash[:success] = "Logged In"
+        end
       end
     end
   end
@@ -38,7 +40,7 @@ class UsersController < ApplicationController
     user.blood_bank_id = current_user.blood_bank_id if !user_params[:blood_bank_id].present?
     if user.save
       flash[:success] = "User Saved"
-      redirect_to users_path
+      redirect_to root_path
     else
       flash[:error] = "User Not Saved"
     end
