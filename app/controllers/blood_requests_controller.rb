@@ -21,7 +21,8 @@ class BloodRequestsController < ApplicationController
     blood_request = BloodRequest.new(blood_request_params)
     blood_request.blood_bank_id = current_user.blood_bank_id
     if blood_request.save
-      render json: { success_message: "Blood Request Saved" }, status: 200
+      flash[:success] = "Blood Request Saved"
+      redirect_to root_path
     else
       render json: { error_message: blood_request.errors.full_messages.join(', ') }, status: 401
     end
@@ -39,6 +40,6 @@ class BloodRequestsController < ApplicationController
   private
 
   def blood_request_params
-    params.require(:blood_request_data).permit(:recipent_id, :blood_type, :is_completed, :blood_unit)
+    params.require(:blood_request).permit(:recipent_id, :blood_type, :is_completed, :blood_unit)
   end
 end

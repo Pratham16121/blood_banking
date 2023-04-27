@@ -1,13 +1,10 @@
-<% if flash.now[:alert] %>
-  <div class="alert alert-danger"><%= flash.now[:alert] %></div>
-<% end %>
 <%= render 'shared/navbar' %>
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
       <h1 class="mb-4">New User</h1>
 
-      <%= form_with url: users_path(auth: params[:auth]), method: :post do |f| %>
+      <%= form_with url: users_path, method: :post do |f| %>
         <%= f.fields_for :user do |user_form| %>
           <div class="form-group">
             <%= user_form.label :name, class: "form-label" %>

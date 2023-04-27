@@ -23,7 +23,7 @@ class Ability
   def admin_abilities
     can [:create], User
     can [:index], User
-    can [:logout], User
+    can [:logout, :search], User
     can [:update, :create, :index], BloodRequest do |request|
       User.find(request[:recipent_id]).blood_bank_id == @user.blood_bank_id
     end

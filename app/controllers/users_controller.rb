@@ -4,11 +4,15 @@ class UsersController < ApplicationController
 
   def logout
     cookies.delete(:auth_token)
+    flash[:error] = "Logged out"
     redirect_to root_path
   end
 
   def search
-    
+    @result = User.select(:id, :name, :email).where(blood_bank_id: current_user.blood_bank_id)
+            .where.not(id: current_user.id)
+            .where("email LIKE ?", "%#{params[:query]}%")
+    render json: @result
   end
 
   def index
@@ -24,6 +28,7 @@ class UsersController < ApplicationController
 
       if user_data
         @users_data = user_data
+        flash[:success] = "Logged In"
       end
     end
   end
@@ -32,9 +37,10 @@ class UsersController < ApplicationController
     user = User.new(user_params)
     user.blood_bank_id = current_user.blood_bank_id if !user_params[:blood_bank_id].present?
     if user.save
-      redirect_to users_path, notice: "User was successfully created."
+      flash[:success] = "User Saved"
+      redirect_to users_path
     else
-      flash.now.alert = user.errors.full_messages.join(', ')
+      flash[:error] = "User Not Saved"
     end
   end
 

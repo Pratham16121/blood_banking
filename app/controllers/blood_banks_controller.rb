@@ -20,7 +20,7 @@ class BloodBanksController < ApplicationController
   private
   
   def blood_bank_params
-    params.require(:blood_bank_data).permit(:name, :address, :city, :state, :country, :location, :phone, :email)
+    params.require(:blood_bank).permit(:name, :address, :city, :state, :country, :location, :phone, :email)
   end
 
   def blood_bank_unique?(blood_bank)

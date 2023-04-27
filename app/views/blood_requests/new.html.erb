@@ -1,19 +1,22 @@
+<%= render 'shared/navbar' %>
 <div class="container">
   <h1>New Blood Request</h1>
-  <%= form_for @blood_request do |f| %>
-    <div class="form-group">
-      <%= f.label :user_id, "User" %>
-      <%= f.text_field :user_id, class: "form-control", id: "user-search", autocomplete: "off" %>
-      <div id="user-results"></div>
-    </div>
-    <div class="form-group">
-      <%= f.label :blood_type %>
-      <%= f.select :blood_type, options_for_select(BloodRequest::BLOOD_TYPES), {}, { class: "form-control" } %>
-    </div>
-    <div class="form-group">
-      <%= f.label :unit %>
-      <%= f.number_field :unit, class: "form-control" %>
-    </div>
+  <%= form_with  url: blood_requests_path, method: :post do |f| %>
+    <%= f.fields_for :blood_request do |blood_request_form| %>
+      <div class="form-group">
+        <%= blood_request_form.label :recipent_id, "Recipent" %>
+        <%= blood_request_form.text_field :recipent_id, class: "form-control", id: "user-search", list: "user-list" %>
+        <datalist id="user-list"></datalist>
+      </div>
+      <div class="form-group">
+        <%= blood_request_form.label :blood_type %>
+        <%= blood_request_form.select :blood_type, ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], { include_blank: true }, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= blood_request_form.label :unit %>
+        <%= blood_request_form.number_field :blood_unit, class: "form-control" %>
+      </div>
+    <% end %>
     <%= f.submit "Create Blood Request", class: "btn btn-primary" %>
   <% end %>
 </div>
@@ -29,11 +32,15 @@
           type: "GET",
           data: { query: query },
           success: function(data) {
-            $("#user-results").html(data);
+            var datalist = $('#user-list');
+            datalist.empty(); // remove existing options
+            $.each(data, function(index, user) {
+              datalist.append($('<option>').val(user.id).text(user.email));
+            });
           }
         });
       } else {
-        $("#user-results").html("");
+        $('#user-list').empty(); // clear the datalist if the search query is empty
       }
     });
   });
