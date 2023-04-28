@@ -26,6 +26,59 @@
   <% elsif @current_user.is_admin? %>
     <!-- HTML for admin -->
     <div class="container">
+      <h1>Blood Requests</h1>
+      <button class="btn btn-primary" id="toggle-btn">Show Completed</button>
+      <table class="table table-striped mt-3">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Recipient ID</th>
+            <th>Blood Type</th>
+            <th>Units Required</th>
+            <th>Status</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody id="blood-requests-table">
+          <% @blood_requests[:pending].each do |blood_request| %>
+            <tr>
+              <td><%= blood_request["id"] %></td>
+              <td><%= blood_request["recipent_id"] %></td>
+              <td><%= blood_request["blood_type"] %></td>
+              <td><%= blood_request["blood_unit"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      $(document).ready(function() {
+        $("#toggle-btn").click(function() {
+          var completedTable = "";
+          var pendingTable = "";
+          var bloodRequests = <%= @blood_requests.to_json %>;
+
+          bloodRequests.completed.forEach(function(bloodRequest) {
+            completedTable += "<tr><td>" + bloodRequest.id + "</td><td>" + bloodRequest.recipent_id + "</td><td>" + bloodRequest.blood_type + "</td><td>" + bloodRequest.blood_unit + "</td><td>Completed</td><td>" + bloodRequest.created_at + "</td></tr>";
+          });
+
+          bloodRequests.pending.forEach(function(bloodRequest) {
+            pendingTable += "<tr><td>" + bloodRequest.id + "</td><td>" + bloodRequest.recipent_id + "</td><td>" + bloodRequest.blood_type + "</td><td>" + bloodRequest.blood_unit + "</td><td>Pending</td><td>" + bloodRequest.created_at + "</td></tr>";
+          });
+
+          if ($("#toggle-btn").text() == "Show Completed") {
+            $("#blood-requests-table").html(completedTable);
+            $("#toggle-btn").text("Show Pending");
+          } else {
+            $("#blood-requests-table").html(pendingTable);
+            $("#toggle-btn").text("Show Completed");
+          }
+        });
+      });
+    </script>
+
+    <div class="container">
       <h1>User Data</h1>
       <table class="table table-striped">
         <thead>

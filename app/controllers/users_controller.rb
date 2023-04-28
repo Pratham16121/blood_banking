@@ -22,6 +22,10 @@ class UsersController < ApplicationController
       elsif current_user.is_admin?
         user_data = User.select(:name, :email, :blood_type, :age, :sex, :phone)
                         .where(blood_bank_id: current_user.blood_bank_id, role_id: 3)
+        blood_requests = BloodRequest.where(blood_bank_id: current_user.blood_bank_id)
+                        .group_by(&:is_completed?)
+        @blood_requests = { pending: blood_requests[false] || [],
+                        completed: blood_requests[true] || [] }
       else
         user_data = current_user.as_json(only: [:id, :name, :email, :blood_type, :age, :sex, :phone])
       end
