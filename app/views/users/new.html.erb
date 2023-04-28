@@ -45,6 +45,10 @@
             <%= user_form.label :phone, class: "form-label" %>
             <%= user_form.phone_field :phone, class: "form-control" %>
           </div>
+          <% if @current_user.is_super_admin? %>
+            <%= user_form.hidden_field :role_id, value: 2 %>
+            <%= user_form.hidden_field :blood_bank_id, value: params[:blood_bank_id] %>
+          <% end %>
         <% end %>
 
         <%= f.submit "Create User", class: "btn btn-primary" %>

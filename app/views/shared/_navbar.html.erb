@@ -21,12 +21,11 @@
           <%= link_to "Create Blood Request", new_blood_requests_path, class: "btn btn-primary ml-2" %>
           <%= link_to "Create Donation", new_donations_path, class: "btn btn-primary mx-2" %>
           <%= link_to "Create New User", new_users_path, class: "btn btn-primary mr-2" %>
+        <% elsif @current_user.is_super_admin? %>
+          <%= link_to "New Blood Bank", new_blood_banks_path, class: "btn btn-primary mx-2" %>
         <% end %>
         <%= link_to "Logout", logout_users_path, class: "btn btn-outline-danger" %>
-        <%#= link_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary" %>
       <% else %>
-        <%#= link_to "Sign up", new_user_registration_path, class: "btn btn-outline-primary me-2" %>
-        <%#= link_to "Login", new_user_session_path, class: "btn btn-outline-secondary" %>
       <% end %>
     </div>
   </div>

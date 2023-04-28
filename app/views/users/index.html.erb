@@ -3,25 +3,29 @@
   <% if @current_user.is_super_admin? %>
     <!-- HTML for super admin -->
     <div class="container">
-    <h1>User Data</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Blood Bank Name</th>
-          <th>Number of Admins</th>
-          <th>Number of Users</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @users_data.each do |blood_bank_name, data| %>
+      <h1>User Data</h1>
+      <table>
+        <thead>
           <tr>
-            <td><%= blood_bank_name %></td>
-            <td><%= data[:admins] %></td>
-            <td><%= data[:users] %></td>
+            <th>Blood Bank Name</th>
+            <th>Number of Admins</th>
+            <th>Number of Users</th>
+            <th>Actions</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @users_data.each do |blood_bank_name, data| %>
+            <tr>
+              <td><%= blood_bank_name %></td>
+              <td><%= data[:admins] %></td>
+              <td><%= data[:users] %></td>
+              <td>
+              <%= link_to 'Create Admin', new_users_path(blood_bank_id: BloodBank.find_by(name: blood_bank_name).id), class: 'btn btn-primary' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   <% elsif @current_user.is_admin? %>
     <!-- HTML for admin -->

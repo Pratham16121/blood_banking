@@ -3,7 +3,8 @@ class BloodBanksController < ApplicationController
   def create
     blood_bank = BloodBank.new(blood_bank_params)
     if !blood_bank_unique?(blood_bank) && blood_bank.save
-      render json: { success_message: 'Blood Bank created successfully!' }, status: 200
+      flash[:success] = "Blood Bank Created Successfully"
+      redirect_to root_path
     else
       render json: { error_message: blood_bank.errors.full_messages.join(', ') }, status: 422
     end 

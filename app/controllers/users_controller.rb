@@ -26,12 +26,12 @@ class UsersController < ApplicationController
                         .group_by(&:is_completed?)
         @blood_requests = { pending: blood_requests[false] || [],
                         completed: blood_requests[true] || [] }
+        @blood_requests_to_display = @blood_requests[:pending]
       else
         user_data = current_user.as_json(only: [:id, :name, :email, :blood_type, :age, :sex, :phone])
       end
 
       if user_data
-        @blood_requests_to_display = @blood_requests[:pending]
         @users_data = user_data
         unless flash[:success]
           flash[:success] = "Logged In"
@@ -72,21 +72,24 @@ class UsersController < ApplicationController
   end
 
   def get_user_data_according_to_blood_banks
-    user_counts = User.group(:blood_bank_id, :role_id).count
-    blood_bank_names = BloodBank.where(id: user_counts.keys.map(&:first)).pluck(:id, :name).to_h
-
+    blood_bank_names = BloodBank.pluck(:id, :name).to_h
+    all_blood_bank_names = blood_bank_names.values.uniq
+    
     user_counts_by_blood_bank = {}
-
+    all_blood_bank_names.each do |blood_bank_name|
+      user_counts_by_blood_bank[blood_bank_name] = { admins: 0, users: 0 }
+    end
+    user_counts = User.group(:blood_bank_id, :role_id).count
     user_counts.each do |(blood_bank_id, role_id), count|
       blood_bank_name = blood_bank_names[blood_bank_id]
-      user_counts_by_blood_bank[blood_bank_name] ||= { admins: 0, users: 0 }
+      next unless blood_bank_name # skip if blood bank not found
       if role_id == Role.find_by(name: Role::ROLE[:admin]).id
         user_counts_by_blood_bank[blood_bank_name][:admins] = count
       else
         user_counts_by_blood_bank[blood_bank_name][:users] = count
       end
     end
-    user_counts_by_blood_bank.reject! { |key, _| key.nil? }
+
     user_counts_by_blood_bank
   end
 end

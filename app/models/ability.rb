@@ -14,7 +14,7 @@ class Ability
     can [:create], User
     can [:index], User
     can [:logout], User
-    can [:create, :index], BloodBank
+  can [:create, :index, :new], BloodBank
     can [:create], Donation do |donation|
       User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
     end
