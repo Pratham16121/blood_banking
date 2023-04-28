@@ -1,6 +1,10 @@
 class Api::V1::DonationsController < ApplicationController
   before_action :authorize
 
+  def new
+
+  end
+  
   def create
     donation = Donation.new(donation_params)
     donation.blood_bank_id = current_user.blood_bank_id

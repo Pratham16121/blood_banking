@@ -6,9 +6,11 @@ class DonationsController < ApplicationController
     donation.blood_bank_id = current_user.blood_bank_id
     donation.donation_date = Time.current
     if donation.save
-      render json: { success_message: 'Donated successfully' }
+      flash[:success] = 'Donated Successfully!'
+      redirect_to root_path
     else
-      render json: { error_message: donation.errors.full_messages.join(',') }, status: 422
+      flash[:error] = 'Could not perform donation'
+      # render json: { error_message: donation.errors.full_messages.join(',') }, status: 422
     end
   end
 

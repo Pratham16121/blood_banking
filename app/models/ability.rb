@@ -28,8 +28,10 @@ class Ability
       User.find(request[:recipent_id]).blood_bank_id == @user.blood_bank_id
     end
     can [:new], BloodRequest
+    can [:new], Donation
     can [:create], Donation do |donation|
-      User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
+      donar_id = donation[:donar_id]
+      User.find(donar_id).blood_bank_id == @user.blood_bank_id if donar_id.present?
     end
   end
 

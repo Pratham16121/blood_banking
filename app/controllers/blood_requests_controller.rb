@@ -29,12 +29,38 @@ class BloodRequestsController < ApplicationController
   end
 
   def update
-    blood_request = BloodRequest.find params[:id]
-    if blood_request.update!(blood_request_params)
-      flash[:success] = "Blood Request Saved"
+    # Find total count of blood bags with a particular blood type and current_user blood bank id
+    blood_request = BloodRequest.find(params[:id])
+    blood_type = blood_request.blood_type
+    blood_bank_id = current_user.blood_bank_id
+    blood_bags = BloodBag.where(blood_type: blood_type, blood_bank_id: blood_bank_id)
+
+    # Calculate the total count of blood bags
+    total_count = blood_bags.sum(:quantity)
+
+    # Check if total count is greater than or equal to twice the requested blood units
+    if total_count >= blood_request.blood_unit * 2
+      # Sort blood bags by their latest expiry date
+      blood_bags = blood_bags.order(:expiry_date)
+
+      # Subtract the quantity of blood_request.blood_unit * 2 from the blood bags according to their latest dates of expiry
+      blood_bags_left_to_remove = blood_request.blood_unit * 2
+      blood_bags.each do |blood_bag|
+        break if blood_bags_left_to_remove == 0
+
+        quantity_to_remove = [blood_bags_left_to_remove, blood_bag.quantity].min
+        blood_bag.update(quantity: blood_bag.quantity - quantity_to_remove)
+
+        blood_bags_left_to_remove -= quantity_to_remove
+      end
+
+      blood_request.update!(blood_request_params)
+      flash[:success] = "Your Blood Request has been processed!"
       redirect_back fallback_location: root_path
     else
-      render json: { error_message: blood_request.errors.full_messages.join(', ') }, status: 401
+      flash[:error] = "Your blood request can't be processed at this time!"
+      redirect_back fallback_location: root_path
+      # render json: { error_message: blood_request.errors.full_messages.join(', ') }, status: 422
     end
   end
 

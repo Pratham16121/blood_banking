@@ -1,0 +1,47 @@
+<%= render 'shared/navbar' %>
+<div class="container">
+  <h1>New Donation Request</h1>
+  <%= form_with  url: donations_path, method: :post do |f| %>
+    <%= f.fields_for :donation do |donation_form| %>
+      <div class="form-group">
+        <%= donation_form.label :donar_id, "Donar Email" %>
+        <%= donation_form.text_field :donar_id, class: "form-control", id: "user-search", list: "user-list" %>
+        <datalist id="user-list"></datalist>
+      </div>
+      <div class="form-group">
+        <%= donation_form.label :blood_type %>
+        <%= donation_form.select :blood_type, ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], { include_blank: true }, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= donation_form.label :unit %>
+        <%= donation_form.number_field :blood_unit, class: "form-control" %>
+      </div>
+    <% end %>
+    <%= f.submit "Create Donation Request", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // Call API to search for users as you type
+    $("#user-search").on("input", function() {
+      var query = $(this).val();
+      if (query.length > 0) {
+        $.ajax({
+          url: "/users/search",
+          type: "GET",
+          data: { query: query },
+          success: function(data) {
+            var datalist = $('#user-list');
+            datalist.empty(); // remove existing options
+            $.each(data, function(index, user) {
+              datalist.append($('<option>').val(user.id).text(user.email));
+            });
+          }
+        });
+      } else {
+        $('#user-list').empty(); // clear the datalist if the search query is empty
+      }
+    });
+  });
+</script>
