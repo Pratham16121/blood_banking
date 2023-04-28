@@ -31,6 +31,7 @@ class UsersController < ApplicationController
       end
 
       if user_data
+        @blood_requests_to_display = @blood_requests[:pending]
         @users_data = user_data
         unless flash[:success]
           flash[:success] = "Logged In"

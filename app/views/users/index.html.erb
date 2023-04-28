@@ -27,7 +27,6 @@
     <!-- HTML for admin -->
     <div class="container">
       <h1>Blood Requests</h1>
-      <button class="btn btn-primary" id="toggle-btn">Show Completed</button>
       <table class="table table-striped mt-3">
         <thead>
           <tr>
@@ -35,8 +34,7 @@
             <th>Recipient ID</th>
             <th>Blood Type</th>
             <th>Units Required</th>
-            <th>Status</th>
-            <th>Created At</th>
+            <th>Mark as completed</th>
           </tr>
         </thead>
         <tbody id="blood-requests-table">
@@ -46,6 +44,9 @@
               <td><%= blood_request["recipent_id"] %></td>
               <td><%= blood_request["blood_type"] %></td>
               <td><%= blood_request["blood_unit"] %></td>
+              <td>
+                <input type="checkbox" class="complete-blood-request-checkbox" data-blood-request-id="<%= blood_request["id"] %>">
+              </td>
             </tr>
           <% end %>
         </tbody>
@@ -53,58 +54,35 @@
     </div>
 
     <script>
-      $(document).ready(function() {
-        $("#toggle-btn").click(function() {
-          var completedTable = "";
-          var pendingTable = "";
-          var bloodRequests = <%= @blood_requests.to_json %>;
-
-          bloodRequests.completed.forEach(function(bloodRequest) {
-            completedTable += "<tr><td>" + bloodRequest.id + "</td><td>" + bloodRequest.recipent_id + "</td><td>" + bloodRequest.blood_type + "</td><td>" + bloodRequest.blood_unit + "</td><td>Completed</td><td>" + bloodRequest.created_at + "</td></tr>";
-          });
-
-          bloodRequests.pending.forEach(function(bloodRequest) {
-            pendingTable += "<tr><td>" + bloodRequest.id + "</td><td>" + bloodRequest.recipent_id + "</td><td>" + bloodRequest.blood_type + "</td><td>" + bloodRequest.blood_unit + "</td><td>Pending</td><td>" + bloodRequest.created_at + "</td></tr>";
-          });
-
-          if ($("#toggle-btn").text() == "Show Completed") {
-            $("#blood-requests-table").html(completedTable);
-            $("#toggle-btn").text("Show Pending");
+      const completeBloodRequestCheckboxes = document.querySelectorAll('.complete-blood-request-checkbox');
+      
+      completeBloodRequestCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+          const bloodRequestId = checkbox.dataset.bloodRequestId;
+          const confirmed = confirm("Are you sure you want to mark this blood request as completed?");
+          
+          if (confirmed) {
+            const data = {
+              "blood_request": {
+                "is_completed": true
+              }
+            };
+            
+            fetch(`/blood_requests/${bloodRequestId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            })
           } else {
-            $("#blood-requests-table").html(pendingTable);
-            $("#toggle-btn").text("Show Completed");
+            checkbox.checked = false;
           }
         });
       });
     </script>
 
-    <div class="container">
-      <h1>User Data</h1>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Blood Type</th>
-            <th>Age</th>
-            <th>Sex</th>
-            <th>Phone</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @users_data.each do |user| %>
-            <tr>
-              <td><%= user['name'] %></td>
-              <td><%= user['email'] %></td>
-              <td><%= user['blood_type'] %></td>
-              <td><%= user['age'] %></td>
-              <td><%= user['sex'] %></td>
-              <td><%= user['phone'] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <%#= render 'shared/show_all_users' %>
   <% else %>
     <!-- HTML for regular user -->
     <div class="container">

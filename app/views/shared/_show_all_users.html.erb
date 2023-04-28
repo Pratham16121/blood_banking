@@ -1,0 +1,27 @@
+<div class="container">
+<h1>User Data</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Blood Type</th>
+      <th>Age</th>
+      <th>Sex</th>
+      <th>Phone</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users_data.each do |user| %>
+      <tr>
+        <td><%= user['name'] %></td>
+        <td><%= user['email'] %></td>
+        <td><%= user['blood_type'] %></td>
+        <td><%= user['age'] %></td>
+        <td><%= user['sex'] %></td>
+        <td><%= user['phone'] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

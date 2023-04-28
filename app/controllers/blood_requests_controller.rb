@@ -31,7 +31,8 @@ class BloodRequestsController < ApplicationController
   def update
     blood_request = BloodRequest.find params[:id]
     if blood_request.update!(blood_request_params)
-      render json: { success_message: "Blood Request Updated" }, status: 200
+      flash[:success] = "Blood Request Saved"
+      redirect_back fallback_location: root_path
     else
       render json: { error_message: blood_request.errors.full_messages.join(', ') }, status: 401
     end
