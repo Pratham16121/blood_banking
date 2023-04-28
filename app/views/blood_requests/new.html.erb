@@ -4,7 +4,7 @@
   <%= form_with  url: blood_requests_path, method: :post do |f| %>
     <%= f.fields_for :blood_request do |blood_request_form| %>
       <div class="form-group">
-        <%= blood_request_form.label :recipent_id, "Recipent" %>
+        <%= blood_request_form.label :recipent_id, "Recipent Email" %>
         <%= blood_request_form.text_field :recipent_id, class: "form-control", id: "user-search", list: "user-list" %>
         <datalist id="user-list"></datalist>
       </div>

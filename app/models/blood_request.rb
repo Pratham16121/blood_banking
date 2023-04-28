@@ -7,5 +7,4 @@ class BloodRequest < ApplicationRecord
   validates :blood_unit, presence: true
 
   enum blood_type: User.blood_types
-
 end

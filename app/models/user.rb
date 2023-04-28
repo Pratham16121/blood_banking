@@ -7,7 +7,8 @@ class User < ApplicationRecord
   has_many :blood_banks, through: :donations
 
   validates :email, presence: true, uniqueness: { scope: :blood_bank_id }
-  validates :phone, presence: true, uniqueness: true
+  validates :phone, presence: true, uniqueness: true, format: { with: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/, 
+                                                                message: "Invalid phone number format" }
   validates :blood_type, presence: true
   validates :name, presence: true
   validates :sex, format: { with: /\A(Male|Female|Other)\z/,
@@ -39,7 +40,7 @@ class User < ApplicationRecord
 
   private
 
-  def set_role_id
+  def set_role_id 
     self.role_id = Role.find_by_name('user').id unless role_id.present?
   end
 end
