@@ -56,10 +56,11 @@ class BloodRequestsController < ApplicationController
 
       blood_request.update!(blood_request_params)
       flash[:success] = "Your Blood Request has been processed!"
-      redirect_back fallback_location: root_path
+      redirect_to root_path, status: :see_other
+
     else
       flash[:error] = "Your blood request can't be processed at this time!"
-      redirect_back fallback_location: root_path
+      redirect_to root_path
       # render json: { error_message: blood_request.errors.full_messages.join(', ') }, status: 422
     end
   end

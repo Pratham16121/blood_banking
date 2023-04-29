@@ -1,0 +1,22 @@
+<%= render 'shared/navbar' %>
+<div class="container">
+  <h1>Donation History</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Blood Type</th>
+        <th>Blood Unit</th>
+        <th>Donation Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @donations.each do |donation| %>
+        <tr>
+          <td><%= donation.blood_type %></td>
+          <td><%= donation.blood_unit %></td>
+          <td><%= donation.donation_date.strftime("%Y-%m-%d") %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

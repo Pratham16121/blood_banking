@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       get 'new', as: 'new'
       get 'search'
       get 'logout'
+      get 'donations'
+      get 'consumptions'
     end
   end
   resources :blood_requests, only: [ :index, :create, :update ] do

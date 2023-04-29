@@ -2,9 +2,9 @@
 <% if @current_user %>
   <% if @current_user.is_super_admin? %>
     <!-- HTML for super admin -->
-    <div class="container">
+   <div class="container">
       <h1>User Data</h1>
-      <table>
+      <table class="table">
         <thead>
           <tr>
             <th>Blood Bank Name</th>
@@ -20,7 +20,7 @@
               <td><%= data[:admins] %></td>
               <td><%= data[:users] %></td>
               <td>
-              <%= link_to 'Create Admin', new_users_path(blood_bank_id: BloodBank.find_by(name: blood_bank_name).id), class: 'btn btn-primary' %>
+                <%= link_to 'Create Admin', new_users_path(blood_bank_id: BloodBank.find_by(name: blood_bank_name).id), class: 'btn btn-primary' %>
               </td>
             </tr>
           <% end %>
@@ -91,17 +91,45 @@
     <!-- HTML for regular user -->
     <div class="container">
       <div class="row">
-        <div class="col-md-6 d-flex align-items-center">
+        <div class="col-md-3 d-flex align-items-center">
           <h3><%= @users_data["name"] %></h3>
         </div>
         <div class="col-md-6">
-          <ul class="list-group">
-            <li class="list-group-item"><strong>Email:</strong> <%= @users_data["email"] %></li>
-            <li class="list-group-item"><strong>Phone:</strong> <%= @users_data["phone"] %></li>
-            <li class="list-group-item"><strong>Age:</strong> <%= @users_data["age"] %></li>
-            <li class="list-group-item"><strong>Sex:</strong> <%= @users_data["sex"] %></li>
-            <li class="list-group-item"><strong>Blood Type:</strong> <%= @users_data["blood_type"] %></li>
-          </ul>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>Email</th>
+                <td><%= @users_data["email"] %></td>
+              </tr>
+              <tr>
+                <th>Phone</th>
+                <td><%= @users_data["phone"] %></td>
+              </tr>
+              <tr>
+                <th>Age</th>
+                <td><%= @users_data["age"] %></td>
+              </tr>
+              <tr>
+                <th>Sex</th>
+                <td><%= @users_data["sex"] %></td>
+              </tr>
+              <tr>
+                <th>Blood Type</th>
+                <td><%= @users_data["blood_type"] %></td>
+              </tr>
+              <tr>
+                <th>Blood Bank</th>
+                <td><%= @blood_bank %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-center">
+          <div class="btn-group float-md-right mt-3">
+            <%= link_to 'Donation History', donations_users_path, class: 'btn btn-primary mr-3 align-middle' %>
+            <%= link_to 'Consumption History', consumptions_users_path, class: 'btn btn-secondary align-middle' %>
+          </div>
         </div>
       </div>
     </div>

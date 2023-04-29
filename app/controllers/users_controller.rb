@@ -28,6 +28,7 @@ class UsersController < ApplicationController
                         completed: blood_requests[true] || [] }
         @blood_requests_to_display = @blood_requests[:pending]
       else
+        @blood_bank = BloodBank.find(current_user.blood_bank_id).name
         user_data = current_user.as_json(only: [:id, :name, :email, :blood_type, :age, :sex, :phone])
       end
 
@@ -62,6 +63,14 @@ class UsersController < ApplicationController
       flash.now.alert = "Invalid email or password"
       render :new
     end
+  end
+
+  def donations
+    @donations = Donation.where(donar_id: current_user.id, blood_bank_id: current_user.blood_bank_id)
+  end
+
+  def consumptions
+    @consumptions = BloodRequest.where(recipent_id: current_user.id, blood_bank_id: current_user.blood_bank_id)
   end
 
   private

@@ -1,0 +1,30 @@
+<%= render 'shared/navbar' %>
+<div class="container">
+  <h1>Blood Requests</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Blood Type</th>
+        <th>Blood Unit</th>
+        <th>Status</th>
+        <th>Request Generated</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @consumptions.each do |consumption| %>
+        <tr>
+          <td><%= consumption.blood_type %></td>
+          <td><%= consumption.blood_unit %></td>
+          <td>
+            <% if consumption.is_completed %>
+              <span class="badge badge-success">Completed</span>
+            <% else %>
+              <span class="badge badge-warning">Pending</span>
+            <% end %>
+          </td>
+          <td><%= consumption.created_at.strftime('%Y-%m-%d') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

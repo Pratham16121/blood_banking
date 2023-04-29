@@ -41,5 +41,6 @@ class Ability
     can [:create], Donation do |donation|
       User.find(donation[:donar_id]).blood_bank_id == @user.blood_bank_id
     end
+    can [:donations, :consumptions], User
   end
 end
