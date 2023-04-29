@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authorize, only: [:create]
-  skip_load_and_authorize_resource only: [:login, :index]
+  skip_load_and_authorize_resource only: [:login, :index, :show_blood_banks]
 
   def logout
     cookies.delete(:auth_token)
@@ -52,16 +52,23 @@ class UsersController < ApplicationController
     end
   end
 
+  def show_blood_banks
+    email = params[:email]
+    user = User.select(:blood_bank_id).where(email: email)
+    blood_banks = BloodBank.select(:id, :name).where(id: user.pluck(:blood_bank_id))
+    render json: blood_banks
+  end
+
   def login
-    user = User.find_by_email(user_params[:email])
+    user = User.find_by(email: user_params[:email], blood_bank_id: params[:blood_bank_id])
 
     if user && user.authenticate(user_params[:password])
       token = encode_token({ user_id: user.id, time: Time.now })
       cookies[:auth_token] = token
       redirect_to users_path, method: :get
     else
-      flash.now.alert = "Invalid email or password"
-      render :new
+      flash[:error] = "Invalid email or password"
+      redirect_to root_path
     end
   end
 

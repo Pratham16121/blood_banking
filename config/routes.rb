@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get 'logout'
       get 'donations'
       get 'consumptions'
+      get 'show_blood_banks', to: 'users#show_blood_banks', as: 'show_blood_banks'
     end
   end
   resources :blood_requests, only: [ :index, :create, :update ] do
