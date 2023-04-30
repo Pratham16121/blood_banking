@@ -9,7 +9,9 @@
             <%= user_form.email_field :email, class: "form-control", id: "user_email", placeholder: "Enter email" %>
           </div>
           <div id="blood-bank-list">
+            <%= user_form.label :blood_Bank, class: "text-capitalize" %>
             <select class="form-control" name="blood_bank_id" id="blood_bank_id">
+              <option value="">Select blood bank</option>
             </select>
           </div>
           <div class="form-group">
