@@ -1,6 +1,6 @@
 <%= render 'shared/navbar' %>
 <div class="container">
-  <h1>New Donation Request</h1>
+  <h1>New Donation</h1>
   <%= form_with  url: donations_path, method: :post do |f| %>
     <%= f.fields_for :donation do |donation_form| %>
       <div class="form-group">

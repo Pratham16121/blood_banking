@@ -2,7 +2,11 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
+      <% if @current_user.is_admin? %>
       <h1 class="mb-4">New User</h1>
+      <% elsif @current_user.is_super_admin? %>
+      <h1 class="mb-4">New Admin</h1>
+      <% end %>
 
       <%= form_with url: users_path, method: :post do |f| %>
         <%= f.fields_for :user do |user_form| %>
